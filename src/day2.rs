@@ -47,31 +47,18 @@ pub fn input_generator(input: &str) -> Result<Vec<PassList>, Box<dyn Error>> {
 }
 
 #[aoc(day2, part1, regex)]
-// this doesn't capture all:
-// - looking at capture count doesn't work because might be multiple captures below max
-// - need to accumulate len of captures
-// - but then same as just matching single char and summing like search
-pub fn part_01(input: &[PassList]) -> u64 {
+pub fn part_01_regex(input: &[PassList]) -> u64 {
     let mut regex;
     let mut re;
     let mut matches = 0;
 
     for i in input {
-        regex = format!(r"[{}]{{{},{}}}", i.c, i.min, i.max);
+        // https://regex101.com/r/oYsSPf/1
+        regex = format!(r"^[^{0}]*({0}[^{0}]*){{{1},{2}}}$", i.c, i.min, i.max);
         re = Regex::new(&regex).unwrap();
-        let mut count = 0;
-        debug!("day 2 regex: {:?} for {:?}", re, i);
-        // re.captures(&i.password).and_then(|cap| {
-        //     count += cap.len();
-        //     println!("{:?} {:?}", i.password, count);
-        // });
-        // if count as u32 <= i.max && count as u32 >= i.min {
-        //     matches += 1;
-        // }
-        // if re.find_iter(&s.password).count() == 1 {
-        //     matches += 1;
-        //     println!("{:?} is a match", s);
-        // }
+        if re.is_match(&i.password) {
+            matches += 1;
+        }
     }
 
     matches
@@ -92,7 +79,7 @@ pub fn part_01_search(input: &[PassList]) -> u64 {
     matches
 }
 
-#[aoc(day2, part2)]
+#[aoc(day2, part2, search)]
 pub fn part_02_search(input: &[PassList]) -> u64 {
     let mut matches = 0;
 
@@ -116,15 +103,43 @@ pub fn part_02_search(input: &[PassList]) -> u64 {
     matches
 }
 
+#[aoc(day2, part2, regex)]
+pub fn part_02_regex(input: &[PassList]) -> u64 {
+    let mut regex;
+    let mut re;
+    let mut matches = 0;
+
+    for i in input {
+        let min = i.min - 1;
+        let max = i.max - min - 1;
+
+        // this doesn't work...
+        // lookaround solution but not supported: https://regex101.com/r/O2Dfm9/1
+        regex = format!(r"^.{{{1}}}[{0}].{{{2}}}[^{0}]", i.c, min, max);
+        println!("{:?}", regex);
+        re = Regex::new(&regex).unwrap();
+        if re.is_match(&i.password) {
+            matches += 1;
+        }
+    }
+
+    matches
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    const EXAMPLE: &str = "1-3 a: abcde\n1-3 b: cdefg\n2-9 c: ccccccccc";
+    const EXAMPLE: &str = "1-3 a: abccde\n1-3 b: cdefg\n2-9 c: ccccccccc";
 
     #[test]
     fn part1_regex_example() {
-        assert_eq!(part_01(&input_generator(EXAMPLE).unwrap()), 2);
+        assert_eq!(part_01_regex(&input_generator(EXAMPLE).unwrap()), 2);
+    }
+
+    #[test]
+    fn part2_regex_example() {
+        assert_eq!(part_02_regex(&input_generator(EXAMPLE).unwrap()), 1);
     }
 
     #[test]
