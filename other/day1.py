@@ -1,4 +1,4 @@
-from input import get_ints
+from inputs import get_ints
 
 INPUT = get_ints(2020, 1)
 

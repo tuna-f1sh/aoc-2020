@@ -47,13 +47,13 @@ mod tests {
 
     const EXAMPLE: &str = "1721\n979\n366\n299\n675\n1456";
 
-    // #[test]
-    // fn part1_example() {
-    //     assert_eq!(part_01(&input_generator(&EXAMPLE)), 514579);
-    // }
+    #[test]
+    fn part1_example() {
+        assert_eq!(part_01(&input_generator(&EXAMPLE)).unwrap(), 514579);
+    }
 
-    // #[test]
-    // fn part2_example() {
-    //     assert_eq!(part_02(&input_generator(&EXAMPLE)), 241861950);
-    // }
+    #[test]
+    fn part2_example() {
+        assert_eq!(part_02(&input_generator(&EXAMPLE)).unwrap(), 241861950);
+    }
 }
