@@ -54,8 +54,8 @@ mod tests {
         assert_eq!(part_01(&input_generator(&EXAMPLE)), 7);
     }
 
-    #[test]
-    fn part2_example() {
-        assert_eq!(part_02(&input_generator(&EXAMPLE)), 336);
-    }
+    // #[test]
+    // fn part2_example() {
+    //     assert_eq!(part_02(&input_generator(&EXAMPLE)), 336);
+    // }
 }
