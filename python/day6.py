@@ -34,26 +34,6 @@ def part_two(groups: list) -> int:
 
     return ret
 
-def int_bisect_str(bp: str, chars=('F', 'B'), start=[0, 127], num=6) -> int:
-    bound = start.copy()
-    i = 0
-
-    for char in bp:
-        if char not in chars:
-            continue
-        if char == chars[0]:
-            bound[1] = ( bound[0] + bound[1] ) / 2
-        elif char  == chars[1]:
-            bound[0] = ( bound[0] + bound[1] ) / 2
-        logger.debug(bound)
-        i += 1
-
-    if i >= num:
-        return math.ceil(bound[0])
-    else:
-        raise ValueError
-
-
 print("Part one example: {}".format(part_one(EXAMPLE)))
 print("Part one: {}".format(part_one(INPUT)))
 print("Part two: {}".format(part_two(INPUT)))
