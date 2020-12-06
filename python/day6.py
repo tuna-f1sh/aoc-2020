@@ -22,7 +22,7 @@ def part_one(groups: list) -> int:
         print("ans: {}, unique {}".format(answers, unique))
         ret += unique
 
-    return ret 
+    return ret
 
 def part_two(groups: list) -> int:
     ret = 0
