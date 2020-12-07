@@ -1,6 +1,6 @@
 import os
 
-def get_input(year: int, day: int, example = False, split = '\n'):
+def get_input(year: int, day: int, example = False, split = '\n', raw = False):
     """
     Get the input for the year and day
 
@@ -9,7 +9,10 @@ def get_input(year: int, day: int, example = False, split = '\n'):
     :param example bool: example file rather than real
     """
     day_str = 'day{}_example.txt' if example else 'day{}.txt'
-    data = open(os.path.join('../input', str(year), day_str.format(day)), 'r').read().strip().split(split)
+    if raw:
+        data = open(os.path.join('../input', str(year), day_str.format(day)), 'r').read()
+    else:
+        data = open(os.path.join('../input', str(year), day_str.format(day)), 'r').read().strip().split(split)
     return data
 
 def get_ints(year, day, example = False):
