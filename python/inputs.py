@@ -25,3 +25,7 @@ def get_ints(year, day, example = False):
     """
     data = get_input(year, day, example)
     return [int(x) for x in data]
+
+def get_program(year, day, example = False):
+    data = get_input(year, day, example)
+    return [(x[:3].zfill(3), int(x[3:])) for x in data]
