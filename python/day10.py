@@ -72,11 +72,15 @@ PART_TWO_CACHE = {}
 
 def part_two(numbers, cache, outlet=0):
     """
+    What is the total number of distinct ways you can arrange the adapters to connect the charging outlet to your device?
+
+    Recursively checks each adaptor for the total number of compatiable next adaptors.
+
     >>> part_two([16, 10, 15, 5, 1, 11, 7, 19, 6, 12, 4], {})
     8
 
     :param numbers list[int]: joltage outputs of adaptors in bag
-    :param cache set: reference to start results during recursive search
+    :param cache set: reference to store results during recursive search
     :param outlet int: joltage of outlet
     """
     # sort increasing value
