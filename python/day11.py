@@ -74,6 +74,3 @@ def part_one(floor_plan: list):
 EXAMPLE_P1 = part_one(EXAMPLE.copy())
 assert EXAMPLE_P1 == 37
 print("Part one: {}".format(part_one(INPUT.copy())))
-# EXAMPLE_P2 = part_two(EXAMPLE.copy(), PART_TWO_CACHE)
-# assert EXAMPLE_P2 == 19208
-# print("Part two: {}".format(part_two(INPUT.copy(), PART_TWO_CACHE)))
