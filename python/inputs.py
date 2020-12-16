@@ -30,6 +30,10 @@ def get_program(year, day, example=False):
     data = get_input(year, day, example)
     return [(x[:3].zfill(3), int(x[3:])) for x in data]
 
+def get_navigation_instructions(year, day, example=False):
+    data = get_input(year, day, example)
+    return [(line[0], float(line[1:])) for line in data]
+
 def get_bus_data(year, day, example=False, strs=False):
     data = get_input(year, day, example)
     id_strs = data[1].split(',')
