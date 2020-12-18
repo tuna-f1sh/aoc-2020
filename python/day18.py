@@ -5,9 +5,6 @@ inputs = __import__("inputs")
 INPUT = inputs.get_input(2020, 18)
 EXAMPLE = inputs.get_input(2020, 18, True)
 
-PARENTHESIS_RE = re.compile(r"(\(.+\))")
-OPERATORS_RE = re.compile(r"(\d+)|(\+|\*)")
-
 # %%
 
 def calc_line(line: str, current=0) -> int:
@@ -25,23 +22,10 @@ def calc_line(line: str, current=0) -> int:
     value = 0
     operator = '+'
     first = True
-    skippy = False
 
     for char in line:
         if char == ' ':
             continue
-        # skip until outside parenthesis
-        # if skippy:
-        #     if char == ')':
-        #         skippy = False
-        #     continue
-        # # break on parenthesis, which should have been calculated into current
-        # if char == '(':
-        #     if first:
-        #         skippy = True
-        #     else:
-        #         value = value * current if operator == '*' else value + current
-        #     break
         if char.isdigit():
             if first:
                 value = int(char)
@@ -53,15 +37,103 @@ def calc_line(line: str, current=0) -> int:
 
     return value
 
+def precedence(op: str, part=1) -> int:
+    """
+    Returns precedence of operator or 0
+
+    >>> precedence('+', part=1)
+    1
+    >>> precedence('+', part=2)
+    2
+    >>> precedence('*', part=2)
+    1
+    >>> precedence('x')
+    0
+
+    """
+    if op == '+':
+        return 1 if part == 1 else 2
+    elif op == '*':
+        return 1
+    return 0
+
+def operate(term1: int, term2: int, op: str) -> int:
+    """
+    Return char op on term1 and term2
+
+    >>> operate(5, 4, '+')
+    9
+    >>> operate(5, 4, '*')
+    20
+
+    :param term1 int
+    :param term2 int: 
+    :param op str: '+' or '*'
+    :rtype int: calculated value
+    """
+    if op == '+':
+        return term1 + term2
+    elif op == '*':
+        return term1 * term2
+    else:
+        raise ValueError
+
+
+def calculate(line: str, part=1) -> int:
+    """
+    Calculates a line using left to right as precedence, including parenthesis
+
+    >>> calculate("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2")
+    13632
+    >>> calculate("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2", part=2)
+    23340
+
+    :param line str: line of single digits, +/* operators or parenthesis ()
+    :param part int: part 1 or 2 calculation
+    :rtype int
+    """
+    terms, ops = [], []
+
+    def combine_terms():
+        term1, term2 = terms.pop(), terms.pop()
+        op = ops.pop()
+        terms.append(operate(term1, term2, op))
+
+    for c in line:
+        if c == ' ':
+            continue
+        if c.isdigit():
+            terms.append(int(c))
+        elif c == '(':
+            ops.append(c)
+        elif c == ')':
+            # work backwards calculating inside brackets
+            while len(ops) and ops[-1] != '(':
+                combine_terms()
+            ops.pop()
+        elif c == '*' or c == '+':
+            while len(ops) and precedence(ops[-1], part) >= precedence(c, part):
+                combine_terms()
+            ops.append(c)
+
+    while len(ops):
+        combine_terms()
+
+    return terms[-1]
+
 def part_one(equations: list) -> int:
     result = 0
  
     for line in equations:
-        paren = PARENTHESIS_RE.findall(line)
-        while len(paren) == 1:
-            current = calc_line(paren[1:-1])
-            paren.append(PARENTHESIS_RE.findall(paren[0][1:-1])[0])
+        result += calculate(line)
 
+    return result
+
+def part_two(equations: list) -> int:
+    result = 0
+ 
+    for line in equations:
+        result += calculate(line, 2)
 
     return result
 
