@@ -99,6 +99,11 @@ def calculate(line: str, part=1) -> int:
         op = ops.pop()
         terms.append(operate(term1, term2, op))
 
+    def combine_terms_eval():
+        term1, term2 = terms.pop(), terms.pop()
+        op = ops.pop()
+        terms.append(eval(f"{term1} {op} {term2}"))
+
     for c in line:
         if c == ' ':
             continue
